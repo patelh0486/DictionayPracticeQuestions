@@ -1,58 +1,61 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
-
-namespace ChangeLookupTable
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+namespace FinalExamReview
 {
     class Program
     {
-        static void Main(string[] args)
+       public static void Main(string[] args)
         {
-            Console.WriteLine("Please write down");
-            string sentence = Console.ReadLine();
-            if(!string.IsNullOrEmpty(sentence))
-            {
-                sentence = sentence.ToLowerInvariant();
-                string[] words = sentence.Split(new[] { '-',';',' ','\t','\r','\n','.',',','!','(',')'},
-                    StringSplitOptions.RemoveEmptyEntries);
-                decimal amount = 0;
-                for(int i=0;i<words.Length;i++)
+            Console.WriteLine("Enter username:");
+            String uname = Console.ReadLine();
+            Console.WriteLine("Enter password:");
+            String password = Console.ReadLine();
+            if (LoginInfo.ContainsKey(uname))
+            { 
+                if(LoginInfo[uname]==password)
                 {
-                    string word = words[i];
-                    decimal worth;
-                    if(_change.TryGetValue(word,out worth))
-                    {
-                        if(i>0)
-                        {
-                            int number;
-                            if(int.TryParse(words[i-1], out number))
-                            {
-                                amount = amount + number * worth;
-                            }
-                        }
-                    }
+                    Console.WriteLine($" {uname} is loggedin.");
                 }
-                Console.WriteLine($"The total amount found in the sentence is {amount:C}");
-               
+            else
+                {
+                    Console.WriteLine("the assword entered is incorrect");
+                }
             }
             else
             {
-                Console.WriteLine("you did not enter a sentence");
+
+                Console.WriteLine($" {uname} user not found.");
+            }
+            foreach(var kvp in LoginInfo)
+            {
+                Console.WriteLine($"{kvp.Key,10} {kvp.Value}");
+            }
+
+            string[] keys = new string[LoginInfo.Count];
+            LoginInfo.Keys.CopyTo(keys, 0);
+            for(int i = 0; i< keys.Length; i++)
+            {
+                Console.WriteLine($"{keys[i],10}");
             }
         }
 
-        private static readonly Dictionary<string, decimal> _change = new Dictionary<string, decimal>()
+        static Program()
         {
-            { "cent", 0.01m},
-            { "cents", 0.01m},
-            { "penny", 0.01m},
-            { "pennies", 0.01m},
-            { "nickel", 0.05m},
-            { "nickels", 0.05m},
-            { "dime", 0.1m},
-            { "dimes", 0.1m},
-            { "quarter", 0.25m},
-            { "quarters", 0.25m}
-        };
+            LoginInfo["hinal"] = "patel";
+            LoginInfo["michael"] = "wu";
+            LoginInfo["gunjan"] = "pabreja";
+        }
+
+        private static readonly Dictionary<string, string> LoginInfo = new Dictionary<string, string>
+        { 
+               {"hinal", "patel"},
+               {"kevin", "patel"},
+               {"binjal", "patel"},
+
+            };
     }
 }
-
